@@ -16,10 +16,7 @@ represent one combination that constructs the `target`.
 You may reuse elements of `wordBank` as many times as needed.
 */
 
-var globalCount = 0
-
 func allConstruct(target string, wordBank []string) [][]string {
-	globalCount++
 	if target == `` {
 		return [][]string{{}}
 	}
@@ -38,36 +35,59 @@ func allConstruct(target string, wordBank []string) [][]string {
 	return res
 }
 
-func allConstructMemo(target string, wordBank []string) [][]string {
+func allConstruct_memo(target string, wordBank []string) [][]string {
 	memo := map[string][][]string{}
 
 	var f func(string, []string) [][]string
 
-	f = func(t string, wb []string) [][]string {
-		globalCount++
-		if t == `` {
+	f = func(target string, wordBank []string) [][]string {
+		if target == `` {
 			return [][]string{{}}
 		}
 
-		res, ok := memo[t]
+		res, ok := memo[target]
 		if ok {
 			return res
 		}
 
 		res = [][]string{}
 
-		for _, word := range wb {
-			if strings.HasPrefix(t, word) {
-				for _, newConstuct := range f(t[len(word):], wb) {
+		for _, word := range wordBank {
+			if strings.HasPrefix(target, word) {
+				for _, newConstuct := range f(target[len(word):], wordBank) {
 					newConstuct = append(newConstuct, word)
 					res = append(res, newConstuct)
 				}
 			}
 		}
 
-		memo[t] = res
+		memo[target] = res
 		return res
 	}
 
 	return f(target, wordBank)
+}
+
+func allConstruct_tab(target string, wordBank []string) [][]string {
+	tab := make([][][]string, len(target)+1)
+	tab[0] = [][]string{{}}
+
+	for i := 0; i < len(tab); i++ {
+		if tab[i] == nil {
+			continue
+		}
+
+		for _, word := range wordBank {
+			if i+len(word) <= len(target) && word == target[i:i+len(word)] {
+				newComb := [][]string{}
+				for _, comb := range tab[i] {
+					sl := append(comb, word)
+					newComb = append(newComb, sl)
+				}
+				tab[i+len(word)] = append(tab[i+len(word)], newComb...)
+			}
+		}
+	}
+
+	return tab[len(tab)-1]
 }
