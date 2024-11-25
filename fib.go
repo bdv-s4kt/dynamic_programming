@@ -8,6 +8,7 @@ The 1st and 2nd number of the sequence is 1.
 To generate the next number of the sequence, we sum the previous two.
 */
 
+// Time: O(2^n), space: O(n)
 func fib(num int) int {
 	if num <= 2 {
 		return 1
@@ -15,6 +16,7 @@ func fib(num int) int {
 	return fib(num-1) + fib(num-2)
 }
 
+// Time: O(n), Space: O(n)
 func fib_memo(num int) int {
 	memo := map[int]int{}
 
@@ -23,18 +25,18 @@ func fib_memo(num int) int {
 		if n <= 2 {
 			return 1
 		}
-		res, ok := memo[n]
-		if ok {
-			return res
+		if _, ok := memo[n]; !ok {
+			memo[n] = fib(n-1) + fib(n-2)
 		}
-		res = fib(n-1) + fib(n-2)
-		memo[n] = res
-		return res
+		return memo[n]
 	}
 
 	return fib(num)
 }
 
+//TODO: add tabulation with actual table as an example
+
+// Time: O(n), Space: O(1)
 func fib_tab(num int) int {
 	if num <= 2 {
 		return 1
