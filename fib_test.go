@@ -5,30 +5,36 @@ import (
 	"testing"
 )
 
-func Test_fib(t *testing.T) {
-	if fib(8) != 21 {
-		t.Error(`fib(6) != 8`)
+func Test_fib_recur(t *testing.T) {
+	if fib_recur(8) != 21 {
+		t.Error(`fib_recur(8) != 21`)
 	}
 }
 
 func Test_fib_memo(t *testing.T) {
 	if fib_memo(8) != 21 {
-		t.Error(`fib(6) != 8`)
+		t.Error(`fib_memo(8) != 21`)
 	}
 }
 
 func Test_fib_tab(t *testing.T) {
 	if fib_tab(8) != 21 {
-		t.Error(`fib(6) != 8`)
+		t.Error(`fib_tab(8) != 21`)
 	}
 }
 
-func Benchmark_fib(b *testing.B) {
+func Test_fib_tab_optim(t *testing.T) {
+	if fib_tab_optim(8) != 21 {
+		t.Error(`fib_tab_optim(8) != 21`)
+	}
+}
+
+func Benchmark_fib_recur(b *testing.B) {
 	testCases := []int{10, 20, 30, 40, 45}
 	for _, testCase := range testCases {
-		b.Run(fmt.Sprintf("fib(%d)", testCase), func(b *testing.B) {
+		b.Run(fmt.Sprintf("fib_recur(%d)", testCase), func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				fib(testCase)
+				fib_recur(testCase)
 			}
 		})
 	}
@@ -50,6 +56,17 @@ func Benchmark_fib_tab(b *testing.B) {
 		b.Run(fmt.Sprintf("fib_tab(%d)", testCase), func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
 				fib_tab(testCase)
+			}
+		})
+	}
+}
+
+func Benchmark_fib_tab_optim(b *testing.B) {
+	testCases := []int{10, 20, 30, 40, 45, 500, 5000, 50000}
+	for _, testCase := range testCases {
+		b.Run(fmt.Sprintf("fib_tab_optim(%d)", testCase), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				fib_tab_optim(testCase)
 			}
 		})
 	}
