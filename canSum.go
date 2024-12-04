@@ -12,7 +12,11 @@ You may use an element of the array as many times as needed.
 You may assume that all input numbers are non-negative.
 */
 
-func canSum(target int, arr []int) bool {
+// Recursive solution
+// m = target
+// n = len(arr)
+// Time: O(n^m), Space: O(m)
+func canSum_recur(target int, arr []int) bool {
 	if target == 0 {
 		return true
 	}
@@ -21,16 +25,20 @@ func canSum(target int, arr []int) bool {
 	}
 
 	for _, num := range arr {
-		if canSum(target-num, arr) {
+		if canSum_recur(target-num, arr) {
 			return true
 		}
 	}
 	return false
 }
 
+// Memoization
+// Time: O(m*n), Space: O(m)
 func canSum_memo(t int, a []int) bool {
-	memo := map[int]bool{}
+	memo := make(map[int]bool, t)
+
 	var f func(int, []int) bool
+
 	f = func(target int, arr []int) bool {
 		if target == 0 {
 			return true
@@ -45,21 +53,24 @@ func canSum_memo(t int, a []int) bool {
 		}
 
 		for _, num := range arr {
-			res := f(target-num, arr)
-			if res {
-				memo[target] = true
+			if f(target-num, arr) {
 				return true
 			}
 		}
+
 		memo[target] = false
 		return false
 	}
+
 	return f(t, a)
 }
 
+// Tabulation
+// Time: O(m*n), Space: O(m)
 func canSum_tab(target int, arr []int) bool {
 	tab := make([]bool, target+1)
 	tab[0] = true
+
 	for i := 0; i < len(tab); i++ {
 		if !tab[i] {
 			continue
