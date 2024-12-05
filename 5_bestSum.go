@@ -11,7 +11,9 @@ If there is a tie for the shortest combination, you may return
 any one of the shortest combinations.
 */
 
-func bestSum(target int, nums []int) []int {
+// Recursive solution
+// Time: O(n^m*m), Space: O(m^2)
+func bestSum_recur(target int, nums []int) []int {
 	if target == 0 {
 		return []int{}
 	}
@@ -22,16 +24,19 @@ func bestSum(target int, nums []int) []int {
 	var best []int
 
 	for _, num := range nums {
-		res := bestSum(target-num, nums)
-		res = append(res, num)
-		if best == nil || (res != nil && len(res) < len(best)) {
-			best = res
+		res := bestSum_recur(target-num, nums)
+		if res != nil {
+			if best == nil || len(best) > len(res) + 1 {
+				best = append(res, num)
+			}
 		}
 	}
 
 	return best
 }
 
+// Memoization
+// Time: O(n*m^2), Space: O(m^2)
 func bestSum_memo(t int, n []int) []int {
 	memo := map[int][]int{}
 
@@ -53,9 +58,10 @@ func bestSum_memo(t int, n []int) []int {
 
 		for _, num := range nums {
 			res := f(target-num, nums)
-			res = append(res, num)
-			if best == nil || (res != nil && len(res) < len(best)) {
-				best = res
+			if res != nil {
+				if best == nil || len(best) > len(res) + 1 {
+					best = append(res, num)
+				}
 			}
 		}
 
@@ -66,6 +72,8 @@ func bestSum_memo(t int, n []int) []int {
 	return f(t, n)
 }
 
+// Tabulation
+// Time: O(n*m^2), Space: O(m^2)
 func bestSum_tab(target int, nums []int) []int {
 	tab := make([][]int, target+1)
 	tab[0] = []int{}
