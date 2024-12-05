@@ -12,7 +12,12 @@ If there are multiple combinations possible, you may
 return any single one.
 */
 
-func howSum(target int, nums []int) []int {
+// m = TargetSum
+// n = len(nums)
+//
+// Recursive solution
+// Time: O(n^m), Space: O(m)
+func howSum_recur(target int, nums []int) []int {
 	if target == 0 {
 		return []int{}
 	}
@@ -21,7 +26,7 @@ func howSum(target int, nums []int) []int {
 	}
 
 	for _, num := range nums {
-		res := howSum(target-num, nums)
+		res := howSum_recur(target-num, nums)
 		if res != nil {
 			res = append(res, num)
 			return res
@@ -30,10 +35,13 @@ func howSum(target int, nums []int) []int {
 	return nil
 }
 
+// Memoization
+// Time: O(n*m), Space: O(m)
 func howSum_memo(t int, n []int) []int {
-	memo := map[int][]int{}
+	memo := map[int]bool{}
 
 	var f func(int, []int) []int
+
 	f = func(target int, nums []int) []int {
 		if target == 0 {
 			return []int{}
@@ -41,25 +49,25 @@ func howSum_memo(t int, n []int) []int {
 		if target < 0 {
 			return nil
 		}
-		val, ok := memo[target]
-		if ok {
-			return val
+		if _, ok := memo[target]; ok {
+			return nil
 		}
 
 		for _, num := range nums {
 			res := f(target-num, nums)
 			if res != nil {
 				res = append(res, num)
-				memo[target] = res
 				return res
 			}
 		}
-		memo[target] = nil
+		memo[target] = false
 		return nil
 	}
 	return f(t, n)
 }
 
+// Tabulation
+// Time: O(n*m*m), Space: O(m*m)
 func howSum_tab(target int, nums []int) []int {
 	tab := make([][]int, target+1)
 	tab[0] = []int{}
@@ -69,8 +77,7 @@ func howSum_tab(target int, nums []int) []int {
 		}
 		for _, num := range nums {
 			if i+num < len(tab) {
-				res := append(tab[i][:], num)
-				tab[i+num] = res
+				tab[i+num] = append(tab[i][:], num)
 			}
 		}
 	}
