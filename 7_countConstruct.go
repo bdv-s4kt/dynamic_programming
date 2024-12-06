@@ -12,6 +12,10 @@ can be constructed by concatenating elements of the `wordBank` array.
 You may reuse elements of `wordBank` array as many times as neeeded.
 */
 
+// Recursive solution
+// m = len(target)
+// n = len(wordBank)
+// Time: O(n^m*m), Space: O(m^2)
 func countConstruct(target string, wordBank []string) int {
 	if target == `` {
 		return 1
@@ -27,6 +31,8 @@ func countConstruct(target string, wordBank []string) int {
 	return count
 }
 
+// Memoization
+// Time: O(n*m^2), Space: O(m^2)
 func countConstruct_memo(target string, wordBank []string) int {
 	memo := map[string]int{}
 
@@ -55,6 +61,8 @@ func countConstruct_memo(target string, wordBank []string) int {
 	return f(target, wordBank)
 }
 
+// Tabulation
+// Time: O(n*m^2), O(m)
 func countConstruct_tab(target string, wordBank []string) int {
 	tab := make([]int, len(target)+1)
 	tab[0] = 1
