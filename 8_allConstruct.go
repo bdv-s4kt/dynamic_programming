@@ -16,6 +16,10 @@ represent one combination that constructs the `target`.
 You may reuse elements of `wordBank` as many times as needed.
 */
 
+// Recursive solution
+// m = len(target)
+// n = len(wordBank)
+// Time: O(n^m), Space: O(m)
 func allConstruct(target string, wordBank []string) [][]string {
 	if target == `` {
 		return [][]string{{}}
@@ -68,6 +72,8 @@ func allConstruct_memo(target string, wordBank []string) [][]string {
 	return f(target, wordBank)
 }
 
+// Tabulation
+// Time: O(n^m), Space: O(n^m)
 func allConstruct_tab(target string, wordBank []string) [][]string {
 	tab := make([][][]string, len(target)+1)
 	tab[0] = [][]string{{}}
