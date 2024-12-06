@@ -13,13 +13,17 @@ of the `wordBank` array.
 You may reuse elements of `wordBank` as many times as needed.
 */
 
-func canConstruct(target string, wordBank []string) bool {
+// Recursive solution
+// m = len(target)
+// n = len(wordBank)
+// Time: O(n^m*m), Space: O(m^2)
+func canConstruct_recur(target string, wordBank []string) bool {
 	if target == `` {
 		return true
 	}
 
 	for _, word := range wordBank {
-		if strings.HasPrefix(target, word) && canConstruct(target[len(word):], wordBank) {
+		if strings.HasPrefix(target, word) && canConstruct_recur(target[len(word):], wordBank) {
 			return true
 		}
 	}
@@ -27,6 +31,8 @@ func canConstruct(target string, wordBank []string) bool {
 	return false
 }
 
+// Memoization
+// Time: O(n*m^2), Space: O(m^2)
 func canConstruct_memo(target string, wordBank []string) bool {
 	memo := map[string]bool{}
 
@@ -36,14 +42,12 @@ func canConstruct_memo(target string, wordBank []string) bool {
 		if target == `` {
 			return true
 		}
-		res, ok := memo[target]
-		if ok {
-			return res
+		if _, ok := memo[target]; ok {
+			return false
 		}
 
 		for _, word := range worldBank {
 			if strings.HasPrefix(target, word) && f(target[len(word):], wordBank) {
-				memo[target] = true
 				return true
 			}
 		}
@@ -55,6 +59,8 @@ func canConstruct_memo(target string, wordBank []string) bool {
 	return f(target, wordBank)
 }
 
+// Tabulation
+// Time: O(n*m^2), Space: O(m)
 func canConstruct_tab(target string, wordBank []string) bool {
 	tab := make([]bool, len(target)+1)
 	tab[0] = true

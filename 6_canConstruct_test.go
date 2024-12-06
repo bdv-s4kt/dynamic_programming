@@ -19,10 +19,10 @@ var (
 	}
 )
 
-func Test_canConstruct(t *testing.T) {
+func Test_canConstruct_recur(t *testing.T) {
 	for _, testCase := range canConstructTests {
 		t.Run(fmt.Sprintf("%s %v", testCase.target, testCase.wordBank), func(t *testing.T) {
-			res := canConstruct(testCase.target, testCase.wordBank)
+			res := canConstruct_recur(testCase.target, testCase.wordBank)
 			if res != testCase.result {
 				t.Errorf("[%t] should be [%t]", res, testCase.result)
 			}
@@ -56,7 +56,7 @@ func Benchmark_canConstruct(b *testing.B) {
 	for _, testCase := range canConstructTests {
 		b.Run(fmt.Sprintf("%s %v", testCase.target, testCase.wordBank), func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				canConstruct(testCase.target, testCase.wordBank)
+				canConstruct_recur(testCase.target, testCase.wordBank)
 			}
 		})
 	}
